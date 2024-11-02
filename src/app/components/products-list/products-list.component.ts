@@ -6,6 +6,7 @@ import { ApiServiceService } from 'src/app/services/api-service.service';
 import { CreateProductComponent } from '../create-product/create-product.component';
 import { switchMap } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
+import { SpinnerService } from 'src/app/services/spinner.service';
 
 @Component({
   selector: 'app-products-list',
@@ -29,6 +30,7 @@ export class ProductsListComponent implements OnInit {
 
   apiService = inject(ApiServiceService);
   matDialog = inject(MatDialog);
+  spinnerService = inject(SpinnerService);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -37,8 +39,10 @@ export class ProductsListComponent implements OnInit {
   }
 
   private cargarProductos(): void {
+    this.spinnerService.show();
     this.apiService.getAll()
     .subscribe(response => {
+      this.spinnerService.hide();
       this.products = response;
       this.dataSource.data = this.products;
       this.dataSource.paginator = this.paginator;
@@ -52,6 +56,7 @@ export class ProductsListComponent implements OnInit {
 
     dialog.afterClosed().subscribe((result: Product) => {
       if (result) {
+        this.spinnerService.show();
         this.apiService.save(result)
         .pipe(
           switchMap(() => {
@@ -59,6 +64,7 @@ export class ProductsListComponent implements OnInit {
           })
         )
         .subscribe(response => {
+          this.spinnerService.hide();
           this.products = response;
           this.dataSource.data = this.products;
           this.dataSource.paginator = this.paginator;
@@ -69,8 +75,10 @@ export class ProductsListComponent implements OnInit {
 
   getProduct(product: Product): void {
     const { productId } = product;
+    this.spinnerService.show();
     this.apiService.getById(productId)
     .subscribe(response => {
+      this.spinnerService.hide();
       this.product = response
       this.openEditDialog(productId);
     });
@@ -86,6 +94,7 @@ export class ProductsListComponent implements OnInit {
 
     dialog.afterClosed().subscribe((result: Product) => {
       if (result) {
+        this.spinnerService.show();
         this.apiService.update(productId, result)
           .pipe(
             switchMap(() => {
@@ -93,6 +102,7 @@ export class ProductsListComponent implements OnInit {
             })
           )
           .subscribe(response => {
+            this.spinnerService.hide();
             this.products = response;
             this.dataSource.data = this.products;
             this.dataSource.paginator = this.paginator;

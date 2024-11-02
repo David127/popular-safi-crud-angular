@@ -14,13 +14,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CreateProductComponent } from './components/create-product/create-product.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductsListComponent,
-    CreateProductComponent
+    CreateProductComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +38,8 @@ import { CreateProductComponent } from './components/create-product/create-produ
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]
